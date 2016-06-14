@@ -10,6 +10,15 @@ Install:
 go get -u github.com/go-baa/pool
 ```
 
+# Methods:
+
+* New
+* Ping
+* Close
+* Get
+* Put
+* Destroy
+
 Usage:
 
 ```
