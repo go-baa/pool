@@ -26,8 +26,12 @@ func TestPoolTCP(t *testing.T) {
 			return cli
 		})
 		So(err, ShouldBeNil)
-		pool.Close = func(v interface{}) {
-			v.(*net.TCPConn).Close()
+		pool.Ping = func(conn interface{}) bool {
+			return true
+		}
+
+		pool.Close = func(conn interface{}) {
+			conn.(*net.TCPConn).Close()
 		}
 		So(pool.Len(), ShouldEqual, 2)
 	})
