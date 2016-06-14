@@ -152,7 +152,7 @@ func tcpServer() error {
 	for {
 		conn, err := ln.Accept()
 		connNum++
-		log.Printf("\n->accept new connection %v, now has %d connections\n", conn.RemoteAddr(), connNum)
+		//log.Printf("\n->accept new connection %v, now has %d connections\n", conn.RemoteAddr(), connNum)
 		if err != nil {
 			log.Printf("test server accept error: %v", err)
 			continue

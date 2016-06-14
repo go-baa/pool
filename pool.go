@@ -51,14 +51,10 @@ func (p *Pool) Get() (interface{}, error) {
 	for {
 		select {
 		case v := <-p.store:
-			if p.Ping != nil {
-				if p.Ping(v) {
-					return v, nil
-				}
+			if p.Ping != nil && p.Ping(v) == false {
 				continue
-			} else {
-				return v, nil
 			}
+			return v, nil
 		default:
 			return p.create()
 		}
@@ -67,13 +63,6 @@ func (p *Pool) Get() (interface{}, error) {
 
 // Put set back conn into store again
 func (p *Pool) Put(v interface{}) {
-	if p.store == nil {
-		// pool aleardy destroyed, close passed connection
-		if p.Close != nil {
-			p.Close(v)
-		}
-		return
-	}
 	select {
 	case p.store <- v:
 		return
@@ -105,7 +94,7 @@ func (p *Pool) Destroy() {
 
 func (p *Pool) create() (interface{}, error) {
 	if p.New == nil {
-		return nil, fmt.Errorf("Pool.New is nil, can not create connection!")
+		return nil, fmt.Errorf("Pool.New is nil, can not create connection")
 	}
 	return p.New(), nil
 }
