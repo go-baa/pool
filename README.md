@@ -2,14 +2,22 @@
 
 common golang tcp connection pool, Get inspirations from sync.Pool
 
-# Methods:
+# Features
+
+### Methods:
+
+* Get
+* Put
+* Len
+* Destroy
+
+### Attributes:
 
 * New
 * Ping
 * Close
-* Get
-* Put
-* Destroy
+
+> you should set pool.New and pool.Close functions
 
 # Getting Started
 
