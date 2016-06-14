@@ -2,14 +2,6 @@
 
 common golang tcp connection pool, Get inspirations from sync.Pool
 
-# Getting Started
-
-Install:
-
-```
-go get -u github.com/go-baa/pool
-```
-
 # Methods:
 
 * New
@@ -18,6 +10,15 @@ go get -u github.com/go-baa/pool
 * Get
 * Put
 * Destroy
+
+# Getting Started
+
+Install:
+
+```
+go get -u github.com/go-baa/pool
+```
+
 
 Usage:
 
