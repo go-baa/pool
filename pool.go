@@ -14,6 +14,8 @@ type Pool struct {
 	// Close close connection
 	Close func(interface{})
 	store chan interface{}
+	count int
+	max   int
 	mu    sync.Mutex
 }
 
@@ -56,6 +58,9 @@ func (p *Pool) Get() (interface{}, error) {
 			}
 			return v, nil
 		default:
+			if p.count >= p.max {
+				continue
+			}
 			return p.create()
 		}
 	}
@@ -70,6 +75,9 @@ func (p *Pool) Put(v interface{}) {
 		// pool is full, close passed connection
 		if p.Close != nil {
 			p.Close(v)
+			p.mu.Lock()
+			p.count--
+			p.mu.Unlock()
 		}
 		return
 	}
@@ -96,5 +104,8 @@ func (p *Pool) create() (interface{}, error) {
 	if p.New == nil {
 		return nil, fmt.Errorf("Pool.New is nil, can not create connection")
 	}
+	p.mu.Lock()
+	p.count++
+	p.mu.Unlock()
 	return p.New(), nil
 }
