@@ -1,8 +1,14 @@
 package pool
 
 import (
+	"errors"
 	"fmt"
 	"sync"
+)
+
+var (
+	// ErrClosed is the error resulting if the pool is closed via pool.Close().
+	ErrClosed = errors.New("pool is closed")
 )
 
 // Pool common connection pool
@@ -45,17 +51,18 @@ func (p *Pool) Len() int {
 // Get returns a conn form store or create one
 func (p *Pool) Get() (interface{}, error) {
 	if p.store == nil {
-		// pool aleardy destroyed, returns new connection
-		return p.create()
+		// pool aleardy destroyed, returns error
+		return nil, ErrClosed
 	}
 	for {
 		select {
 		case v := <-p.store:
-			if p.Ping != nil && p.Ping(v) == false {
+			if p.Ping != nil && !p.Ping(v) {
 				continue
 			}
 			return v, nil
 		default:
+			// pool is empty, returns new connection
 			return p.create()
 		}
 	}
