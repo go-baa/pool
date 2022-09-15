@@ -17,7 +17,8 @@ func TestMain(t *testing.T) {
 	var err error
 	var n int
 	go tcpServer()
-	time.Sleep(time.Second)
+	// wait TCP server start
+	time.Sleep(time.Millisecond * 10)
 
 	t.Run("create connection pool", func(t *testing.T) {
 		pool, err = New(2, 10, func() interface{} {
