@@ -4,6 +4,7 @@ import (
 	"log"
 	"net"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -11,11 +12,12 @@ import (
 // serverAddr  test tcp server address
 var serverAddr = "127.0.0.1:8003"
 
-func TestPoolTCP(t *testing.T) {
+func TestMain(t *testing.T) {
 	var pool *Pool
 	var err error
 	var n int
 	go tcpServer()
+	time.Sleep(time.Second)
 
 	t.Run("create connection pool", func(t *testing.T) {
 		pool, err = New(2, 10, func() interface{} {
